@@ -60,7 +60,7 @@ const (
 )
 
 // JWTSecret is the secret jwt key used to create tokens.
-var JWTSecret = os.Getenv("JWT_SECRET")
+var JWTSecret = []byte(os.Getenv("JWT_SECRET"))
 
 // GenerateAccessToken generates an access token using the refresh token.
 func GenerateAccessToken(userID string) (string, error) {
