@@ -7,8 +7,8 @@ import (
 	"gorm.io/gorm"
 )
 
-// Base model.
-type Base struct {
+// Model model.
+type Model struct {
 	ID        string          `json:"id" gorm:"type:uuid;primaryKey;default:uuid_generate_v4()"`
 	CreatedAt time.Time       `json:"createdAt"`
 	UpdatedAt time.Time       `json:"updatedAt"`
