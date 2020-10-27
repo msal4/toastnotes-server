@@ -8,7 +8,7 @@ import (
 	"github.com/msal4/toastnotes/auth"
 )
 
-// JWTAuth handles
+// JWTAuth is the auth middleware that handles jwt authentication.
 func JWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenStr, err := c.Cookie(auth.AccessTokenKey)
