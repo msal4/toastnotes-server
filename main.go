@@ -16,8 +16,6 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-var userController = &controllers.UserController{}
-
 func main() {
 	godotenv.Load()
 	db.Init()
@@ -41,14 +39,14 @@ func main() {
 
 	v1 := router.Group("api/v1")
 	{
-		v1.POST("/register", userController.Register)
-		v1.POST("/login", userController.Login)
-		v1.POST("/refresh", userController.RefreshToken)
+		v1.POST("/register", controllers.Register)
+		v1.POST("/login", controllers.Login)
+		v1.POST("/refresh", controllers.RefreshToken)
 
 		authenticated := v1.Group("/", middleware.JWTAuth())
 		{
-			authenticated.GET("/me", userController.Me)
-			authenticated.POST("/change_password", userController.ChangePassword)
+			authenticated.GET("/me", controllers.Me)
+			authenticated.POST("/change_password", controllers.ChangePassword)
 		}
 	}
 

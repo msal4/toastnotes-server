@@ -19,7 +19,7 @@ type User struct {
 }
 
 // RegisterUser creates a new user record using a SignUpForm.
-func (u *User) RegisterUser(data auth.RegisterForm) (*User, error) {
+func RegisterUser(data auth.RegisterForm) (*User, error) {
 	password, err := auth.HashPassword(data.Password)
 	if err != nil {
 		return nil, err
@@ -33,7 +33,7 @@ func (u *User) RegisterUser(data auth.RegisterForm) (*User, error) {
 }
 
 // RetrieveUser finds the user with the given id.
-func (u *User) RetrieveUser(id string) (*User, error) {
+func RetrieveUser(id string) (*User, error) {
 	var user User
 	if err := FindByID(&user, id); err != nil {
 		return nil, err
@@ -42,7 +42,7 @@ func (u *User) RetrieveUser(id string) (*User, error) {
 }
 
 // EmailTaken check if a user has already registered with the given email.
-func (u *User) EmailTaken(email string) bool {
+func EmailTaken(email string) bool {
 	err := db.DB.First(&User{}, "email = ?", email).Error
 
 	return !errors.Is(err, gorm.ErrRecordNotFound)
