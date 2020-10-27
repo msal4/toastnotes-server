@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -58,8 +59,8 @@ const (
 	PasswordHashCost = 11
 )
 
-// JWTSecret stores the secret jwt key
-var JWTSecret = []byte("secretkeygoeshere")
+// JWTSecret is the secret jwt key used to create tokens.
+var JWTSecret = os.Getenv("JWT_SECRET")
 
 // GenerateAccessToken generates an access token using the refresh token.
 func GenerateAccessToken(userID string) (string, error) {

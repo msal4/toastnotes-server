@@ -6,7 +6,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"github.com/msal4/toastnotes/auth"
 	"github.com/msal4/toastnotes/controllers"
 	"github.com/msal4/toastnotes/db"
 	"github.com/msal4/toastnotes/middleware"
@@ -25,11 +24,6 @@ func main() {
 	}
 
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
-
-	// get secret key from env
-	if key := os.Getenv("JWT_SECRET"); key != "" {
-		auth.JWTSecret = []byte(key)
-	}
 
 	validation.UseJSONFieldNames()
 
