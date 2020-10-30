@@ -16,8 +16,20 @@ import (
 	"gorm.io/gorm"
 )
 
+// UserController holds all the user controller dependencies.
+type UserController struct {
+	Repository *models.UserRepository
+}
+
+// NewUserController creates a new user controller with default config.
+func NewUserController() *UserController {
+	return &UserController{
+		Repository: models.NewUserRepository(),
+	}
+}
+
 // Register a new user.
-func Register(c *gin.Context) {
+func (ctrl *UserController) Register(c *gin.Context) {
 	// Validate the form
 	var form auth.RegisterForm
 	if errs := shouldBindJSON(c, &form); errs != nil {
@@ -26,13 +38,13 @@ func Register(c *gin.Context) {
 	}
 
 	// Check if the email is taken.
-	if models.EmailTaken(form.Email) {
+	if ctrl.Repository.EmailTaken(form.Email) {
 		c.AbortWithStatusJSON(http.StatusNotAcceptable, utils.Err("A user with this email already exists"))
 		return
 	}
 
 	// Create the user.
-	user, err := models.RegisterUser(form)
+	user, err := ctrl.Repository.RegisterUser(form)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, utils.Err("Failed to register user"))
 		return
@@ -42,7 +54,7 @@ func Register(c *gin.Context) {
 }
 
 // Login a user.
-func Login(c *gin.Context) {
+func (ctrl *UserController) Login(c *gin.Context) {
 	var credentials auth.Credentials
 	if errs := shouldBindJSON(c, &credentials); errs != nil {
 		c.AbortWithStatusJSON(http.StatusNotAcceptable, *errs)
@@ -69,14 +81,14 @@ func Login(c *gin.Context) {
 
 // ChangePassword takes the current password for the authenticated user and allows them to set a new
 // password.
-func ChangePassword(c *gin.Context) {
+func (ctrl *UserController) ChangePassword(c *gin.Context) {
 	var form auth.ChangePasswordForm
 	if err := shouldBindJSON(c, &form); err != nil {
 		c.AbortWithStatusJSON(http.StatusNotAcceptable, err)
 		return
 	}
 
-	user, err := models.RetrieveUser(c.GetString(auth.UserIDKey))
+	user, err := ctrl.Repository.RetrieveUser(c.GetString(auth.UserIDKey))
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.AbortWithStatusJSON(http.StatusNotFound, utils.Err("User not found"))
@@ -111,10 +123,10 @@ func ChangePassword(c *gin.Context) {
 }
 
 // Me retrieves the authenticated user details.
-func Me(c *gin.Context) {
+func (ctrl *UserController) Me(c *gin.Context) {
 	userID := c.GetString(auth.UserIDKey)
 
-	user, err := models.RetrieveUser(userID)
+	user, err := ctrl.Repository.RetrieveUser(userID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.AbortWithStatusJSON(http.StatusNotFound, utils.Err("User not found"))
@@ -128,8 +140,8 @@ func Me(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
-// RefreshToken uses the refresh token to generate an access token and regenerates refresh_token.
-func RefreshToken(c *gin.Context) {
+// RefreshTokens uses the refresh token to generate an access token and regenerates refresh_token.
+func (ctrl *UserController) RefreshTokens(c *gin.Context) {
 	tokenStr, err := c.Cookie(auth.RefreshTokenKey)
 
 	if err != nil {
@@ -156,7 +168,7 @@ func RefreshToken(c *gin.Context) {
 		return
 	}
 
-	user, err := models.RetrieveUser(claims.UserID)
+	user, err := ctrl.Repository.RetrieveUser(claims.UserID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.AbortWithStatusJSON(http.StatusNotFound, utils.Err("User not found"))

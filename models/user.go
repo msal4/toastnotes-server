@@ -18,22 +18,32 @@ type User struct {
 	TokenVersion int    `json:"-" gorm:"default:0"`
 }
 
+// UserRepository holds all the database operations related to the user.
+type UserRepository struct {
+	DB *gorm.DB
+}
+
+// NewUserRepository creates a new user repository with the default db.
+func NewUserRepository() *UserRepository {
+	return &UserRepository{DB: db.DB}
+}
+
 // RegisterUser creates a new user record using a SignUpForm.
-func RegisterUser(data auth.RegisterForm) (*User, error) {
+func (rep *UserRepository) RegisterUser(data auth.RegisterForm) (*User, error) {
 	password, err := auth.HashPassword(data.Password)
 	if err != nil {
 		return nil, err
 	}
 
 	user := User{Name: data.Name, Email: data.Email, Password: password}
-	if err := db.DB.Create(&user).Error; err != nil {
+	if err := rep.DB.Create(&user).Error; err != nil {
 		return nil, fmt.Errorf("Failed to create user")
 	}
 	return &user, nil
 }
 
 // RetrieveUser finds the user with the given id.
-func RetrieveUser(id string) (*User, error) {
+func (rep *UserRepository) RetrieveUser(id string) (*User, error) {
 	var user User
 	if err := FindByID(&user, id); err != nil {
 		return nil, err
@@ -42,8 +52,8 @@ func RetrieveUser(id string) (*User, error) {
 }
 
 // EmailTaken check if a user has already registered with the given email.
-func EmailTaken(email string) bool {
-	err := db.DB.First(&User{}, "email = ?", email).Error
+func (rep *UserRepository) EmailTaken(email string) bool {
+	err := rep.DB.First(&User{}, "email = ?", email).Error
 
 	return !errors.Is(err, gorm.ErrRecordNotFound)
 }
