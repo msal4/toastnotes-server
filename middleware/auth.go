@@ -18,9 +18,7 @@ func JWTAuth() gin.HandlerFunc {
 		}
 
 		claims := auth.AccessTokenClaims{}
-		token, err := jwt.ParseWithClaims(tokenStr, &claims, func(t *jwt.Token) (interface{}, error) {
-			return auth.JWTSecret, nil
-		})
+		token, err := auth.ParseToken(tokenStr, &claims)
 		if err != nil {
 			if err == jwt.ErrSignatureInvalid {
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})

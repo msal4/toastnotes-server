@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -60,7 +59,7 @@ const (
 )
 
 // JWTSecret is the secret jwt key used to create tokens.
-var JWTSecret = []byte(os.Getenv("JWT_SECRET"))
+var JWTSecret = []byte("mysecretkeygoeshere")
 
 // GenerateAccessToken generates an access token using the refresh token.
 func GenerateAccessToken(userID string) (string, error) {
@@ -99,6 +98,18 @@ func GenerateRefreshToken(userID string, version int) (string, error) {
 	}
 
 	return tokenString, nil
+}
+
+// ParseToken parses the token and returns the token obj or an error.
+func ParseToken(tokenStr string, claims jwt.Claims) (*jwt.Token, error) {
+	token, err := jwt.ParseWithClaims(tokenStr, claims, func(t *jwt.Token) (interface{}, error) {
+		return JWTSecret, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return token, nil
 }
 
 // HashPassword hashes the password string.
