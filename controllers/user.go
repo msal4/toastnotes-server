@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/msal4/toastnotes/auth"
-	"github.com/msal4/toastnotes/db"
 	"github.com/msal4/toastnotes/models"
 	"github.com/msal4/toastnotes/utils"
 	"github.com/msal4/toastnotes/validation"
@@ -22,9 +21,9 @@ type UserController struct {
 }
 
 // NewUserController creates a new user controller with default config.
-func NewUserController() *UserController {
+func NewUserController(db *gorm.DB) *UserController {
 	return &UserController{
-		Repository: models.NewUserRepository(),
+		Repository: models.NewUserRepository(db),
 	}
 }
 
@@ -62,7 +61,7 @@ func (ctrl *UserController) Login(c *gin.Context) {
 	}
 
 	var user models.User
-	if err := db.DB.First(&user, "email = ?", credentials.Email).Error; err != nil {
+	if err := ctrl.Repository.DB.First(&user, "email = ?", credentials.Email).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.AbortWithStatusJSON(http.StatusNotFound, utils.Err("User not found"))
 			return
@@ -114,7 +113,7 @@ func (ctrl *UserController) ChangePassword(c *gin.Context) {
 		return
 	}
 
-	if err := db.DB.Model(&user).Update("password", hash).Error; err != nil {
+	if err := ctrl.Repository.DB.Model(&user).Update("password", hash).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, utils.Err("Failed to update password"))
 		return
 	}

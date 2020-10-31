@@ -4,12 +4,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/msal4/toastnotes/auth"
 	"github.com/msal4/toastnotes/controllers"
 	"github.com/msal4/toastnotes/db"
-	"github.com/msal4/toastnotes/middleware"
 	"github.com/msal4/toastnotes/models"
 	"github.com/msal4/toastnotes/validation"
 	"github.com/rs/zerolog"
@@ -19,10 +17,14 @@ import (
 func main() {
 	// init
 	godotenv.Load()
-	db.Init()
+	conn, err := db.Connect()
+	if err != nil {
+		panic(err)
+	}
+
 	validation.UseJSONFieldNames()
 
-	if err := db.DB.AutoMigrate(&models.User{}); err != nil {
+	if err := conn.AutoMigrate(&models.User{}); err != nil {
 		panic(fmt.Sprintln("migrating failed with error:", err))
 	}
 
@@ -31,25 +33,8 @@ func main() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 
 	// router
-	router := gin.Default()
-
-	router.Use(middleware.CORS())
-
-	// controllers
-	userController := controllers.NewUserController()
-
-	v1 := router.Group("api/v1")
-	{
-		v1.POST("/register", userController.Register)
-		v1.POST("/login", userController.Login)
-		v1.POST("/refresh", userController.RefreshTokens)
-
-		authenticated := v1.Group("/", middleware.JWTAuth())
-		{
-			authenticated.GET("/me", userController.Me)
-			authenticated.POST("/change_password", userController.ChangePassword)
-		}
+	router := controllers.SetupRouter(conn)
+	if err := router.Run(); err != nil {
+		panic(err)
 	}
-
-	router.Run()
 }

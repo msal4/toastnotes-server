@@ -1,27 +1,25 @@
 package db
 
 import (
-	"fmt"
+	"errors"
 	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-// DB is the database instance.
-var DB *gorm.DB
-
-// Init connects to the database.
-func Init() {
+// Connect connects to the database.
+func Connect() (*gorm.DB, error) {
 	dsn := os.Getenv("DB_URI")
 	var err error
-	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("failed to connect to database")
+		return nil, err
+	}
+	// Create the uuid extension to generate uuids for the id field in models.
+	if err := db.Exec("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\"").Error; err != nil {
+		return nil, errors.New("Could not create extension \"uuid-ossp\"")
 	}
 
-	// Create the uuid extension to generate uuids for the id field in models.
-	if err := DB.Exec("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\"").Error; err != nil {
-		fmt.Println("Could not create extension \"uuid-ossp\"")
-	}
+	return db, nil
 }

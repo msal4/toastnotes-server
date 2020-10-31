@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/msal4/toastnotes/auth"
-	"github.com/msal4/toastnotes/db"
 	"gorm.io/gorm"
 )
 
@@ -20,12 +19,12 @@ type User struct {
 
 // UserRepository holds all the database operations related to the user.
 type UserRepository struct {
-	DB *gorm.DB
+	*Repository
 }
 
 // NewUserRepository creates a new user repository with the default db.
-func NewUserRepository() *UserRepository {
-	return &UserRepository{DB: db.DB}
+func NewUserRepository(db *gorm.DB) *UserRepository {
+	return &UserRepository{Repository: &Repository{DB: db}}
 }
 
 // RegisterUser creates a new user record using a SignUpForm.
@@ -45,7 +44,7 @@ func (rep *UserRepository) RegisterUser(data auth.RegisterForm) (*User, error) {
 // RetrieveUser finds the user with the given id.
 func (rep *UserRepository) RetrieveUser(id string) (*User, error) {
 	var user User
-	if err := FindByID(&user, id); err != nil {
+	if err := rep.FindByID(&user, id); err != nil {
 		return nil, err
 	}
 	return &user, nil

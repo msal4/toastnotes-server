@@ -3,7 +3,6 @@ package models
 import (
 	"time"
 
-	"github.com/msal4/toastnotes/db"
 	"gorm.io/gorm"
 )
 
@@ -15,7 +14,12 @@ type Model struct {
 	DeletedAt *gorm.DeletedAt `json:"-" gorm:"index"`
 }
 
+// Repository is the base repository.
+type Repository struct {
+	DB *gorm.DB
+}
+
 // FindByID finds a record with the given id.
-func FindByID(v interface{}, id string) error {
-	return db.DB.First(v, "id = ?", id).Error
+func (rep *Repository) FindByID(v interface{}, id string) error {
+	return rep.DB.First(v, "id = ?", id).Error
 }
