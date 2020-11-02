@@ -6,6 +6,7 @@ import (
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 // Model is the base model.
@@ -27,8 +28,13 @@ func (rep *Repository) FindByID(v interface{}, id string) error {
 }
 
 // OpenConnection opens a db connections using the provided uri.
-func OpenConnection(dsn string) (*gorm.DB, error) {
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+func OpenConnection(dsn string, lgr logger.Interface) (*gorm.DB, error) {
+	if lgr == nil {
+		lgr = logger.Default
+	}
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		Logger: lgr,
+	})
 	if err != nil {
 		return nil, err
 	}
