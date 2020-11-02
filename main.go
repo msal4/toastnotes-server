@@ -15,7 +15,7 @@ import (
 func main() {
 	// init
 	godotenv.Load()
-	db, err := models.OpenConnection(os.Getenv("DB_URI"))
+	db, err := models.OpenConnection(os.Getenv("DB_URI"), nil)
 	if err != nil {
 		panic(err)
 	}

@@ -26,6 +26,7 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 		{
 			authenticated.GET("/me", userController.Me)
 			authenticated.POST("/change_password", userController.ChangePassword)
+			authenticated.DELETE("/logout", userController.Logout)
 		}
 	}
 
