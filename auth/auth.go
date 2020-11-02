@@ -10,7 +10,7 @@ import (
 // Credentials are the needed credentials to log a user in.
 type Credentials struct {
 	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required"`
+	Password string `json:"password" binding:"required,min=8"`
 }
 
 // RegisterForm is used to register a new user.
