@@ -155,6 +155,7 @@ func TestChangePassword(t *testing.T) {
 		assert.Equal(t, http.StatusOK, w.Code)
 	})
 
+	// this also tests the JWTAuth middleware.
 	t.Run("does_not_authorize_a_non_authenticated_user", func(t *testing.T) {
 		w := httptest.NewRecorder()
 
