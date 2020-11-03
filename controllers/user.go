@@ -113,7 +113,11 @@ func (ctrl *UserController) ChangePassword(c *gin.Context) {
 		return
 	}
 
-	if err := ctrl.Repository.DB.Model(&user).Update("password", hash).Error; err != nil {
+	err = ctrl.Repository.DB.Model(&user).Updates(models.User{
+		Password:     hash,
+		TokenVersion: user.TokenVersion + 1,
+	}).Error
+	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, utils.Err("Failed to update password"))
 		return
 	}
