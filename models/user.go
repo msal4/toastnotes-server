@@ -22,7 +22,7 @@ type UserRepository struct {
 	*Repository
 }
 
-// NewUserRepository creates a new user repository with the default db.
+// NewUserRepository creates a new user repository.
 func NewUserRepository(db *gorm.DB) *UserRepository {
 	return &UserRepository{Repository: &Repository{DB: db}}
 }

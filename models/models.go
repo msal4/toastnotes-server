@@ -38,6 +38,7 @@ func OpenConnection(dsn string, lgr logger.Interface) (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	// Create the uuid extension to generate uuids for the id field in models.
 	if err := db.Exec("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\"").Error; err != nil {
 		return nil, errors.New("Could not create extension \"uuid-ossp\"")

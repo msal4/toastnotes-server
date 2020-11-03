@@ -11,6 +11,10 @@ import (
 // JWTAuth is the auth middleware that handles jwt authentication.
 func JWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		abort := func() {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		}
+
 		tokenStr, err := c.Cookie(auth.AccessTokenKey)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
@@ -21,7 +25,7 @@ func JWTAuth() gin.HandlerFunc {
 		token, err := auth.ParseToken(tokenStr, &claims)
 		if err != nil {
 			if err == jwt.ErrSignatureInvalid {
-				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+
 				return
 			}
 
