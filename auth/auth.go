@@ -49,10 +49,10 @@ const (
 	UserIDKey = "userId"
 
 	// RefreshTokenKey is the key used to set the refresh token cookie
-	RefreshTokenKey = "refresh_token"
+	RefreshTokenKey = "herz"
 
 	// AccessTokenKey is the key used to set the refresh token cookie
-	AccessTokenKey = "token"
+	AccessTokenKey = "seele"
 
 	// PasswordHashCost is the cost used for hashing the user password.
 	PasswordHashCost = 11
