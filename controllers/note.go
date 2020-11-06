@@ -44,12 +44,13 @@ func (ctrl *NoteController) Retrieve(c *gin.Context) {
 	c.JSON(http.StatusOK, note)
 }
 
-// List gets the authenticated user notes.
+// List handles getting the authenticated user notes.
 func (ctrl *NoteController) List(c *gin.Context) {
 	userID := c.GetString(auth.UserIDKey)
 
 	notes := []models.Note{}
-	err := ctrl.Repository.DB.Scopes(models.Paginate(c)).Find(&notes, "user_id = ?", userID).Order("updated_at DESC").Error
+	err := ctrl.Repository.DB.Scopes(models.Paginate(c)).Select("ID", "Title", "CreatedAt", "UpdatedAt").
+		Find(&notes, "user_id = ?", userID).Order("updated_at DESC").Error
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, utils.Err("Failed to retrieve notes"))
 		return
@@ -102,9 +103,9 @@ func (ctrl *NoteController) Delete(c *gin.Context) {
 	note.UserID = c.GetString(auth.UserIDKey)
 
 	if err := ctrl.Repository.DB.Delete(&note).Error; err != nil {
-		c.AbortWithStatusJSON(http.StatusInternalServerError, utils.Err("Could not delete note :("))
+		c.AbortWithStatusJSON(http.StatusInternalServerError, utils.Err("Could not delete the note :("))
 		return
 	}
 
-	c.JSON(http.StatusOK, note)
+	c.JSON(http.StatusOK, utils.Msg("Note removed"))
 }

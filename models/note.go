@@ -6,8 +6,8 @@ import "gorm.io/gorm"
 type Note struct {
 	Model
 	Title   string `json:"title" binding:"required"`
-	Content string `json:"content"`
-	UserID  string `json:"userId"`
+	Content string `json:"content,omitempty"`
+	UserID  string `json:"userId,omitempty"`
 }
 
 // NoteRepository holds the notes actions.
