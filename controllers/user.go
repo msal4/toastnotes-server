@@ -20,7 +20,7 @@ type UserController struct {
 	Repository *models.UserRepository
 }
 
-// NewUserController creates a new user controller with default config.
+// NewUserController creates a new user controller.
 func NewUserController(db *gorm.DB) *UserController {
 	return &UserController{
 		Repository: models.NewUserRepository(db),

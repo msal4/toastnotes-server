@@ -2,8 +2,11 @@ package models
 
 import (
 	"errors"
+	"strconv"
 	"time"
 
+	"github.com/gin-gonic/gin"
+	"github.com/msal4/toastnotes/settings"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -44,9 +47,31 @@ func OpenConnection(dsn string, lgr logger.Interface) (*gorm.DB, error) {
 		return nil, errors.New("Could not create extension \"uuid-ossp\"")
 	}
 
-	if err := db.AutoMigrate(&User{}); err != nil {
+	if err := db.AutoMigrate(&User{}, &Note{}); err != nil {
 		return nil, err
 	}
 
 	return db, nil
+}
+
+// Paginate paginates the given request context using scopes.
+func Paginate(c *gin.Context) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		page, _ := strconv.Atoi(c.Query("page"))
+		if page == 0 {
+			page = 1
+		}
+
+		pageSize, _ := strconv.Atoi(c.Query("page_size"))
+		switch {
+		case pageSize > settings.MaxPageSize:
+			pageSize = settings.MaxPageSize
+		case pageSize <= 0:
+			pageSize = settings.PageSize
+		}
+
+		offset := (page - 1) * pageSize
+
+		return db.Offset(offset).Limit(pageSize)
+	}
 }

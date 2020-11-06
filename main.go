@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/msal4/toastnotes/auth"
 	"github.com/msal4/toastnotes/controllers"
@@ -28,6 +29,10 @@ func main() {
 
 	// router
 	router := controllers.SetupRouter(db)
+
+	// middlewares
+	router.Use(gin.Logger())
+
 	if err := router.Run(); err != nil {
 		panic(err)
 	}

@@ -15,6 +15,7 @@ type User struct {
 	Email        string `json:"email" gorm:"unique"`
 	Password     string `json:"-"`
 	TokenVersion int    `json:"-" gorm:"default:0"`
+	Notes        []Note `json:"notes"`
 }
 
 // UserRepository holds all the database operations related to the user.
