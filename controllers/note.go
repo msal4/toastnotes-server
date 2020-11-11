@@ -56,7 +56,10 @@ func (ctrl *NoteController) List(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, notes)
+	var total int64
+	ctrl.Repository.DB.Find(&models.Note{}, "user_id = ?", userID).Count(&total)
+
+	c.JSON(http.StatusOK, gin.H{"result": notes, "total": total})
 }
 
 // Create handles creating notes.
