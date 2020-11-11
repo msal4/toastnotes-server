@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -16,7 +17,15 @@ import (
 func main() {
 	// init
 	godotenv.Load()
-	db, err := models.OpenConnection(os.Getenv("DB_URI"), nil)
+	databaseURI := fmt.Sprintf("postgres://%s:%s@%s:%s/%s",
+		os.Getenv("POSTGRES_USER"),
+		os.Getenv("POSTGRES_PASSWORD"),
+		os.Getenv("POSTGRES_HOST"),
+		os.Getenv("POSTGRES_PORT"),
+		os.Getenv("POSTGRES_DB"),
+	)
+
+	db, err := models.OpenConnection(databaseURI, nil)
 	if err != nil {
 		panic(err)
 	}
