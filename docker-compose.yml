@@ -2,24 +2,11 @@ version: "3"
 
 services:
   app:
-    image: golang:1.15.4
-    command:
-      [
-        "./wait-for-it.sh",
-        "${POSTGRES_HOST}:${POSTGRES_PORT}",
-        "--",
-        "go",
-        "run",
-        "main.go",
-      ]
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - ${EXPOSED_PORT}:${PORT}
-    working_dir: /app
-    volumes:
-      - ./:/app
-    environment:
-      PORT:
-      GIN_MODE:
 
   postgres:
     image: postgres:13
