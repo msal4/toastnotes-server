@@ -1,4 +1,6 @@
 #!/bin/bash
+# Use this script to start the notes server, should be used after starting the
+# database service or at the same time.
 
 source .env
 
