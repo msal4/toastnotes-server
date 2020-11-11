@@ -13,12 +13,12 @@ services:
         "main.go",
       ]
     ports:
-      - 8080:8080
+      - ${EXPOSED_PORT}:${PORT}
     working_dir: /app
     volumes:
       - ./:/app
     environment:
-      PORT: 8080
+      PORT:
       GIN_MODE:
 
   postgres:
