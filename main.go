@@ -48,7 +48,8 @@ func main() {
 	certManager := autocert.Manager{
 		Prompt:     autocert.AcceptTOS,
 		Cache:      autocert.DirCache("cert-cache"),
-		HostPolicy: autocert.HostWhitelist("toast.msal.dev"),
+		HostPolicy: autocert.HostWhitelist("api.toast.msal.dev"),
+		Email:      "msal4@outlook.com",
 	}
 
 	server := http.Server{

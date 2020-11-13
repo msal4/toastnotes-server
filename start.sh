@@ -3,6 +3,5 @@
 # database service or at the same time.
 
 source .env
-
 ./wait-for-it.sh $POSTGRES_HOST:$POSTGRES_PORT
 ./app
