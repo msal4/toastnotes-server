@@ -59,7 +59,7 @@ func main() {
 		},
 	}
 
-	go http.ListenAndServe(os.Getenv("PORT"), certManager.HTTPHandler(nil))
+	go http.ListenAndServe(":80", certManager.HTTPHandler(nil))
 	if err := server.ListenAndServeTLS("", ""); err != nil {
 		panic(err)
 	}
