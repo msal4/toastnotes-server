@@ -1,9 +1,7 @@
 package main
 
 import (
-	"crypto/tls"
 	"fmt"
-	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -14,7 +12,6 @@ import (
 	"github.com/msal4/toastnotes/validation"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"golang.org/x/crypto/acme/autocert"
 )
 
 func main() {
@@ -45,23 +42,7 @@ func main() {
 	// middlewares
 	router.Use(gin.Logger())
 
-	certManager := autocert.Manager{
-		Prompt:     autocert.AcceptTOS,
-		Cache:      autocert.DirCache("cert-cache"),
-		HostPolicy: autocert.HostWhitelist("api.toast.msal.dev"),
-		Email:      "msal4@outlook.com",
-	}
-
-	server := http.Server{
-		Addr:    ":443",
-		Handler: router,
-		TLSConfig: &tls.Config{
-			GetCertificate: certManager.GetCertificate,
-		},
-	}
-
-	go http.ListenAndServe(":80", certManager.HTTPHandler(nil))
-	if err := server.ListenAndServeTLS("", ""); err != nil {
+	if err := router.Run(); err != nil {
 		panic(err)
 	}
 }

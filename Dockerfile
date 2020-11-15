@@ -8,8 +8,7 @@ RUN go mod download
 COPY . .
 RUN CGO_ENABLED=0 go build -installsuffix 'static' -o app .
 
-EXPOSE 80
-EXPOSE 443
+EXPOSE $PORT
 
 VOLUME ["/cert-cache"]
 
