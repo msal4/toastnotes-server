@@ -1,4 +1,3 @@
-SHELL = /bin/bash
 dev:
 	go run main.go
 prod:
