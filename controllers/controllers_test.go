@@ -3,7 +3,6 @@ package controllers
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -33,10 +32,6 @@ var mockUserCreds = auth.Credentials{
 }
 
 func TestMain(m *testing.M) {
-	for _, v := range os.Environ() {
-		fmt.Println(v)
-	}
-
 	testutils.LoadEnv()
 
 	var err error

@@ -10,17 +10,20 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+
     services:
       postgres:
         image: postgres:12
         env:
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: secret
           POSTGRES_DB: toast
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
     steps:
       - name: Set up Go 1.x
         uses: actions/setup-go@v2
@@ -36,4 +39,4 @@ jobs:
       - name: Test
         run: make test
     env:
-      TEST_DB_URI: "postgres://postgres:postgres@postgres:5432/toast"
+      TEST_DB_URI: postgres://root:secret@postgres:5432/toast
