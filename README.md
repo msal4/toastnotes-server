@@ -2,3 +2,37 @@
 
 
 The backend for toast notes app.
+### Requirements
+- [Go](https://golang.org/)
+- [Postgres](https://www.postgresql.org/)
+- [Docker](https://www.docker.com/) (optional)
+
+### Setup
+- Create a .env file
+  ```bash
+  cp .env.example .env
+  ```
+  set the `JWT_SECRET`, and `DATABASE_URL` for example `postgres://<user>:<password>@<host>:<port>/<database-name>` in .env
+
+
+### Run
+- using docker
+  ```bash
+  docker build -t <app-tag> .
+  docker run -it <app-tag>
+  ```
+- without docker
+  ```bash
+  make dev
+  ```
+### Deploy
+- set `GIN_MODE=release` in .env
+- using docker-compose
+  - create a `docker-compose.yml` file and add your dependencies there (postgres)
+  - upload to your server (e.g. using git)
+  - build and run using `docker-compose`
+- dokku
+  - use the postgres plugin and link it to toastnotes
+  - using `dokku config` set your environment variables
+  - push to dokku
+  for more details checkout [dokku docs](http://dokku.viewdocs.io/dokku/)
