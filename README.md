@@ -34,8 +34,7 @@ The backend for toast notes app.
 - Dokku
   - use the postgres plugin and link it to toastnotes
   - using `dokku config` set your environment variables
-  - push to dokku
-  for more details checkout [dokku docs](http://dokku.viewdocs.io/dokku/)
+  - push to dokku, for more details checkout [dokku docs](http://dokku.viewdocs.io/dokku/)
 
 ### License
 See [LICENSE](https://github.com/msal4/toastnotes-server/blob/master/LICENSE)
