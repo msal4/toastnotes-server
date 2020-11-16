@@ -1,4 +1,6 @@
 #!/bin/sh
+
+# build the app if requested
 if [[ $1 == "--build" || $1 == "-b" ]]
 then
   . .env
