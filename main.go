@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -18,6 +17,7 @@ func main() {
 	// init
 	godotenv.Load()
 
+	// connect to db
 	db, err := models.OpenConnection(os.Getenv("DATABASE_URL"), nil)
 	if err != nil {
 		panic(err)
@@ -35,7 +35,6 @@ func main() {
 	// middlewares
 	router.Use(gin.Logger())
 
-	fmt.Println("port:", os.Getenv("PORT"))
 	if err := router.Run(); err != nil {
 		log.Fatal().Err(err)
 	}
