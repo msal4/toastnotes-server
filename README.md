@@ -16,22 +16,22 @@ The backend for toast notes app.
 
 
 ### Run
-- using docker
+- Using docker
   ```bash
   docker build -t <app-tag> .
   docker run -it <app-tag>
   ```
-- without docker
+- Without docker
   ```bash
   make dev
   ```
 ### Deploy
-- set `GIN_MODE=release` in .env
-- using docker-compose
+- Set `GIN_MODE=release` in .env
+- Docker Compose
   - create a `docker-compose.yml` file and add your dependencies there (e.g. postgres)
   - upload to your server (e.g. using git)
   - build and run using `docker-compose`
-- dokku
+- Dokku
   - use the postgres plugin and link it to toastnotes
   - using `dokku config` set your environment variables
   - push to dokku
