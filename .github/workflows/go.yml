@@ -38,4 +38,4 @@ jobs:
       - name: Test
         run: make test
     env:
-      TEST_DB_URI: postgres://postgres:postgres@172.0.0.1:5432/toast
+      TEST_DB_URI: postgres://postgres:postgres@127.0.0.1:5432/toast
