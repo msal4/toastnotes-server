@@ -35,7 +35,7 @@ func TestMain(m *testing.M) {
 	testutils.LoadEnv()
 
 	var err error
-	db, err = models.OpenConnection(os.Getenv("TEST_DB_URI"), logger.Discard)
+	db, err = models.OpenConnection(os.Getenv("TEST_DATABASE_URL"), logger.Discard)
 	if err != nil {
 		panic(err)
 	}
