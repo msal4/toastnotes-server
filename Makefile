@@ -1,6 +1,7 @@
+SHELL = /bin/bash
 dev:
 	go run main.go
 prod:
-	./start.sh
+	./start.sh -b
 test:
 	GIN_MODE=release go test -v -cover ./...
