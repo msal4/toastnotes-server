@@ -17,15 +17,8 @@ import (
 func main() {
 	// init
 	godotenv.Load()
-	databaseURI := fmt.Sprintf("postgres://%s:%s@%s:%s/%s",
-		os.Getenv("POSTGRES_USER"),
-		os.Getenv("POSTGRES_PASSWORD"),
-		os.Getenv("POSTGRES_HOST"),
-		os.Getenv("POSTGRES_PORT"),
-		os.Getenv("POSTGRES_DB"),
-	)
 
-	db, err := models.OpenConnection(databaseURI, nil)
+	db, err := models.OpenConnection(os.Getenv("DATABASE_URL"), nil)
 	if err != nil {
 		panic(err)
 	}
@@ -42,7 +35,8 @@ func main() {
 	// middlewares
 	router.Use(gin.Logger())
 
+	fmt.Println("port:", os.Getenv("PORT"))
 	if err := router.Run(); err != nil {
-		panic(err)
+		log.Fatal().Err(err)
 	}
 }
