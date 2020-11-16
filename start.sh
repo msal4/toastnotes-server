@@ -1,7 +1,9 @@
 #!/bin/bash
-# Use this script to start the notes server, should be used after starting the
-# database service or at the same time.
-
-source .env
-./wait-for-it.sh $POSTGRES_HOST:$POSTGRES_PORT
+# get the db url from env vars
+URL=$(echo $DATABASE_URL | grep -o "@.*\/")
+# truncate the '@' at the start and the '/' at the end
+URL=${URL:1:-1}
+# wait for the db to start
+./wait-for-it.sh $URL
+# start the app
 ./app
