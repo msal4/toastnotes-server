@@ -28,7 +28,7 @@ The backend for toast notes app.
 ### Deploy
 - set `GIN_MODE=release` in .env
 - using docker-compose
-  - create a `docker-compose.yml` file and add your dependencies there (postgres)
+  - create a `docker-compose.yml` file and add your dependencies there (e.g. postgres)
   - upload to your server (e.g. using git)
   - build and run using `docker-compose`
 - dokku
@@ -36,3 +36,6 @@ The backend for toast notes app.
   - using `dokku config` set your environment variables
   - push to dokku
   for more details checkout [dokku docs](http://dokku.viewdocs.io/dokku/)
+
+### License
+See [LICENSE](https://github.com/msal4/toastnotes-server/blob/master/LICENSE)
