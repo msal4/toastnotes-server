@@ -1,8 +1,7 @@
 package settings
 
+// Constants used for pagination.
 const (
-	// PageSize is the default pagination size.
-	PageSize = 20
-	// MaxPageSize is the pagination limit.
-	MaxPageSize = 100
+	PageSize    = 20  // default pagination size
+	MaxPageSize = 100 // 100 seems like a reasonable number, its not too high and not too low.
 )
