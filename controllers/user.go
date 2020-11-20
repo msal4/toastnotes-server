@@ -153,8 +153,8 @@ func (ctrl *UserController) Logout(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie(auth.RefreshTokenKey, refreshToken, 1, "/", c.Request.URL.Hostname(), false, true)
-	c.SetCookie(auth.AccessTokenKey, accessToken, 1, "/", c.Request.URL.Hostname(), false, true)
+	c.SetCookie(auth.RefreshTokenKey, refreshToken, 1, "/", "", false, true)
+	c.SetCookie(auth.AccessTokenKey, accessToken, 1, "/", "", false, true)
 }
 
 // RefreshTokens uses the refresh token to generate an access token and regenerates refresh_token.
@@ -228,8 +228,8 @@ func generateTokens(c *gin.Context, userID string, tokenVersion int, resp interf
 		return
 	}
 
-	c.SetCookie(auth.AccessTokenKey, tokenStr, auth.AccessTokenAge, "/", c.Request.URL.Hostname(), false, true)
-	c.SetCookie(auth.RefreshTokenKey, refreshTokenStr, auth.RefreshTokenAge, "/", c.Request.URL.Hostname(), false, true)
+	c.SetCookie(auth.AccessTokenKey, tokenStr, auth.AccessTokenAge, "/", "", false, true)
+	c.SetCookie(auth.RefreshTokenKey, refreshTokenStr, auth.RefreshTokenAge, "/", "", false, true)
 
 	c.JSON(http.StatusOK, resp)
 }
