@@ -43,13 +43,13 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 		v1.POST(APIRegister, userController.Register)
 		v1.POST(APILogin, userController.Login)
 		v1.POST(APIRefresh, userController.RefreshTokens)
+		v1.DELETE(APILogout, userController.Logout)
 
 		authenticated := v1.Group("/", middleware.JWTAuth())
 		{
 			// user
 			authenticated.GET(APIMe, userController.Me)
 			authenticated.POST(APIChangePassword, userController.ChangePassword)
-			authenticated.DELETE(APILogout, userController.Logout)
 
 			// note
 			authenticated.GET(APINote, noteController.List)
