@@ -1,10 +1,6 @@
 package controllers
 
 import (
-	"os"
-	"strings"
-
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/msal4/toastnotes/middleware"
 	"gorm.io/gorm"
@@ -34,14 +30,6 @@ const (
 func SetupRouter(db *gorm.DB) *gin.Engine {
 	// router
 	router := gin.New()
-
-	// cors
-	corsConfig := cors.DefaultConfig()
-	origins := os.Getenv("ALLOW_ORIGINS")
-	if origins != "" {
-		corsConfig.AllowOrigins = strings.Split(origins, ",")
-	}
-	corsConfig.AllowCredentials = true
 
 	// middleware
 	router.Use(gin.Recovery(), middleware.CORS())

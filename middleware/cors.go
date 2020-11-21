@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"os"
 	"strings"
 
@@ -12,12 +11,18 @@ import (
 //CORS (Cross-Origin Resource Sharing).
 func CORS() gin.HandlerFunc {
 	config := cors.DefaultConfig()
-	origins := os.Getenv("ALLOW_ORIGINS")
-	if origins != "" {
-		config.AllowOrigins = strings.Split(origins, ",")
-		fmt.Println("origins:", config.AllowOrigins)
+	originsStr := os.Getenv("ALLOW_ORIGINS")
+
+	if originsStr != "" && originsStr != "*" {
+		origins := []string{}
+		for _, o := range strings.Split(originsStr, ",") {
+			origins = append(origins, strings.Trim(o, " "))
+		}
+		config.AllowOrigins = origins
+		config.AllowCredentials = true
+	} else {
+		config.AllowAllOrigins = true
 	}
-	config.AllowCredentials = true
 
 	return cors.New(config)
 }
