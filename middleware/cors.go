@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//CORS (Cross-Origin Resource Sharing).
+// CORS (Cross-Origin Resource Sharing).
 func CORS() gin.HandlerFunc {
 	config := cors.DefaultConfig()
 	originsStr := os.Getenv("ALLOW_ORIGINS")
