@@ -1,3 +1,5 @@
+.PHONY: dev prod test
+
 dev:
 	go run main.go
 prod:
