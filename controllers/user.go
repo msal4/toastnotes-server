@@ -145,16 +145,10 @@ func (ctrl *UserController) Me(c *gin.Context) {
 
 // Logout deletes token cookies.
 func (ctrl *UserController) Logout(c *gin.Context) {
-	defer c.JSON(http.StatusOK, utils.Msg("Logged out"))
+	http.SetCookie(c.Writer, &http.Cookie{Path: "/", Name: auth.RefreshTokenKey, MaxAge: -1, Secure: true, HttpOnly: true, SameSite: http.SameSiteNoneMode})
+	http.SetCookie(c.Writer, &http.Cookie{Path: "/", Name: auth.AccessTokenKey, MaxAge: -1, Secure: true, HttpOnly: true, SameSite: http.SameSiteNoneMode})
 
-	refreshToken, _ := c.Cookie(auth.RefreshTokenKey)
-	accessToken, _ := c.Cookie(auth.AccessTokenKey)
-	if refreshToken == "" && accessToken == "" {
-		return
-	}
-
-	c.SetCookie(auth.RefreshTokenKey, refreshToken, 1, "/", "", true, true)
-	c.SetCookie(auth.AccessTokenKey, accessToken, 1, "/", "", true, true)
+	c.JSON(http.StatusOK, utils.Msg("Logged out"))
 }
 
 // RefreshTokens uses the refresh token to generate an access token and regenerates refresh_token.
