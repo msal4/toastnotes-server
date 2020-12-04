@@ -32,7 +32,7 @@ func main() {
 	// router
 	router := controllers.SetupRouter(db)
 
-	// middlewares
+	// middleware
 	router.Use(gin.Logger())
 
 	if err := router.Run(); err != nil {
